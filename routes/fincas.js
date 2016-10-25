@@ -3,7 +3,7 @@ var router = express.Router();
 
 router.get("/", (req, res, next) => {
     //let nombre = req.query.nombre;
-    req.db.query("SELECT * FROM usuario", (err, results) => {
+    req.db.query("SELECT * FROM finca", (err, results) => {
         if (err) {
             res.send([]);
         } else {
@@ -14,14 +14,29 @@ router.get("/", (req, res, next) => {
 
 router.get("/:id", (req, res, next) => {
     let id = req.params.id;
-    req.db.query("SELECT * FROM usuario WHERE idusuario = ?", [id], (err, results) => {
+    req.db.query("SELECT * FROM finca WHERE idfinca = ?", [id], (err, results) => {
         if (err) {
             res.status(500).send({ msg: "Error en consulta" });
         } else {
             if (results.length > 0) {
                 res.send(results[0]);
             } else {
-                res.status(404).send({ msg: "Usuario no encontrado" });
+                res.status(404).send({ msg: "Finca no encontrada" });
+            }
+        }
+    });
+});
+
+router.get("/usr/:id", (req, res, next) => {
+    let id = req.params.id;
+    req.db.query("SELECT * FROM finca WHERE idusr = ?", [id], (err, results) => {
+        if (err) {
+            res.status(500).send({ msg: "Error en consulta" });
+        } else {
+            if (results.length > 0) {
+                res.send(results);
+            } else {
+                res.status(404).send({ msg: "Finca no encontrada" });
             }
         }
     });
@@ -29,7 +44,7 @@ router.get("/:id", (req, res, next) => {
 
 router.post("/", (req, res, next) => {
     let body = req.body;
-    req.db.query("INSERT INTO usuario SET ?", body, (err, result) => {
+    req.db.query("INSERT INTO finca SET ?", body, (err, result) => {
         if (err) {
             res.send({ success: false });
         } else {
@@ -42,7 +57,7 @@ router.post("/", (req, res, next) => {
 router.put("/:id", (req, res, next) => {
     let body = req.body;
     let id = req.params.id;
-    req.db.query("UPDATE usuario SET ? WHERE idusuario = ?", [body, id], (err, result) => {
+    req.db.query("UPDATE finca SET ? WHERE idfinca = ?", [body, id], (err, result) => {
         if (err) {
             res.send({ success: false });
         } else {
@@ -53,35 +68,13 @@ router.put("/:id", (req, res, next) => {
 
 router.delete("/:id", (req, res, next) => {
     let id = req.params.id;
-    req.db.query("DELETE FROM usuario WHERE idusuario = ?", [id], (err, result)=>{
+    req.db.query("DELETE FROM finca WHERE idfinca = ?", [id], (err, result)=>{
         if (err) {
             res.send({ success: false });
         } else {
             res.send({ success: true });
         }
     });
-});
-
-router.post("/login",(req, res, next)=>{
-    let body = req.body;
-    req.db.query("SELECT * FROM usuario WHERE usr = ? AND pass = ?",[body.usr, body.pass]
-        , (err, results)=>{
-            if(err){
-                res.send({success:false});
-            }else{
-                if(results.length > 0){
-                    let usr = results[0];
-                    delete usr.pass;
-                    delete usr.usr;
-                    //Encriptar CryptoJS
-                    //Para crear token de sesion es JSONToken
-                    res.send({success:true, userid: usr.id});
-                }else{
-                    res.send({success:false});
-                }
-            }
-
-        });
 });
 
 module.exports = router;

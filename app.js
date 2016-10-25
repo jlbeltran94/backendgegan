@@ -7,14 +7,16 @@ var bodyParser = require('body-parser');
 var mysql = require("mysql");
 var cors =  require("cors");
 
-var users = require('./routes/users');
+var usuarios = require('./routes/usuarios');
+var fincas = require('./routes/fincas');
+var animales = require('./routes/animales');
 
 var app = express();
 var db = mysql.createConnection({
   host:"localhost",
   user:"root",
   password:"",
-  database:"Gegan"
+  database:"gegan"
 });
 
 db.connect();
@@ -35,6 +37,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/usuarios', usuarios);
+app.use('/fincas', fincas);
+app.use('/animales', animales);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
