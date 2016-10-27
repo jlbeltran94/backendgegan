@@ -10,6 +10,7 @@ var cors =  require("cors");
 var usuarios = require('./routes/usuarios');
 var fincas = require('./routes/fincas');
 var animales = require('./routes/animales');
+var reportes = require('./routes/reportes');
 
 var app = express();
 var db = mysql.createConnection({
@@ -39,6 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/usuarios', usuarios);
 app.use('/fincas', fincas);
 app.use('/animales', animales);
+app.use('/reportes', reportes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
