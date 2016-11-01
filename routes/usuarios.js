@@ -14,7 +14,7 @@ router.get("/", (req, res, next) => {
 
 router.get("/:id", (req, res, next) => {
     let id = req.params.id;
-    req.db.query("SELECT * FROM usuario WHERE idusuario = ?", [id], (err, results) => {
+    req.db.query("SELECT * FROM usuario WHERE id = ?", [id], (err, results) => {
         if (err) {
             res.status(500).send({ msg: "Error en consulta" });
         } else {
@@ -42,7 +42,7 @@ router.post("/", (req, res, next) => {
 router.put("/:id", (req, res, next) => {
     let body = req.body;
     let id = req.params.id;
-    req.db.query("UPDATE usuario SET ? WHERE idusuario = ?", [body, id], (err, result) => {
+    req.db.query("UPDATE usuario SET ? WHERE id = ?", [body, id], (err, result) => {
         if (err) {
             res.send({ success: false });
         } else {
@@ -53,7 +53,7 @@ router.put("/:id", (req, res, next) => {
 
 router.delete("/:id", (req, res, next) => {
     let id = req.params.id;
-    req.db.query("DELETE FROM usuario WHERE idusuario = ?", [id], (err, result)=>{
+    req.db.query("DELETE FROM usuario WHERE id = ?", [id], (err, result)=>{
         if (err) {
             res.send({ success: false });
         } else {

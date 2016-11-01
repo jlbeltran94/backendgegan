@@ -3,6 +3,17 @@ var router = express.Router();
 
 
 
+router.get("/", (req, res, next) => {
+    //let nombre = req.query.nombre;
+    req.db.query("SELECT * FROM reporte", (err, results) => {
+        if (err) {
+            res.send([]);
+        } else {
+            res.send(results);
+        }
+    });
+});
+
 
 
 router.get("/idfinca/:id", (req, res, next) => {
@@ -22,8 +33,8 @@ router.get("/idfinca/:id", (req, res, next) => {
 
 router.get("/idfinca/:id/tipo/:tipo", (req, res, next) => {
     let id = req.params.id;
-    let sexo = req.params.sexo
-    req.db.query("SELECT * FROM reporte WHERE id_finca = ? AND tipo = ?", [id,sexo], (err, results) => {
+    let tipo = req.params.tipo
+    req.db.query("SELECT * FROM reporte WHERE id_finca = ? AND tipo = ?", [id,tipo], (err, results) => {
         if (err) {
             res.status(500).send({ msg: "Error en consulta" });
         } else {
