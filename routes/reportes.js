@@ -14,6 +14,21 @@ router.get("/", (req, res, next) => {
     });
 });
 
+router.get("/:id", (req, res, next) => {
+    let id = req.params.id;
+    req.db.query("SELECT * FROM reporte WHERE id = ?", [id], (err, results) => {
+        if (err) {
+            res.status(500).send({ msg: "Error en consulta" });
+        } else {
+            if (results.length > 0) {
+                res.send(results[0]);
+            } else {
+                res.status(404).send({ msg: "reporte no encontrado" });
+            }
+        }
+    });
+});
+
 
 
 router.get("/idfinca/:id", (req, res, next) => {
@@ -34,7 +49,7 @@ router.get("/idfinca/:id", (req, res, next) => {
 router.get("/idfinca/:id/tipo/:tipo", (req, res, next) => {
     let id = req.params.id;
     let tipo = req.params.tipo
-    req.db.query("SELECT * FROM reporte WHERE id_finca = ? AND tipo = ?", [id,tipo], (err, results) => {
+    req.db.query("SELECT * FROM reporte WHERE id_finca = ? AND tipo = ?", [id, tipo], (err, results) => {
         if (err) {
             res.status(500).send({ msg: "Error en consulta" });
         } else {
@@ -72,7 +87,7 @@ router.put("/:id", (req, res, next) => {
 
 router.delete("/:id", (req, res, next) => {
     let id = req.params.id;
-    req.db.query("DELETE FROM reporte WHERE id = ?", [id], (err, result)=>{
+    req.db.query("DELETE FROM reporte WHERE id = ?", [id], (err, result) => {
         if (err) {
             res.send({ success: false });
         } else {
